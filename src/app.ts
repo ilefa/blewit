@@ -49,6 +49,14 @@ const packed = Object.assign({}, { verbose, user, device, group });
 const mode = getCurrentMode(user, device, group);
 const manager = new ProviderManager();
 
+axios
+    .get('https://its-api.uconn.edu', { timeout: 1000 })
+    .then(_ => verbose && logger.info('Net', 'Completed network self-test successfully.'))
+    .catch(_ => {
+        logger.severe('Net', 'Unable to connect to the API - please ensure you are connected to the UConn Network.');
+        process.exit(1);
+    });
+
 verbose && console.table(packed);
 
 manager.register(new DeviceProvider());
